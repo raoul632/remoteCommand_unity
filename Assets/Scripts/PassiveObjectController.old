@@ -7,6 +7,8 @@ using UnityEngine;
 public class PassiveObjectController : MonoBehaviour
 {
     //mecanism for moving object
+    // TODO
+    // move all command function to an single call
     public int interpolationFramesCount = 100;
 
     [SerializeField] GameObject remoteControl; 
@@ -62,15 +64,17 @@ public class PassiveObjectController : MonoBehaviour
         _internalState = InternalState.ROTATERIGHT;
     }
 
-    public void Nono (InternalState _internal){
-        _internalState = _internal; 
+    
+    //public void Nono (InternalState _internal){
+    //    _internalState = _internal; 
 
-    }
+    //}
 
 
     // Update is called once per frame
     void Update()
     {
+        //State.Execute(); <-- comment sortir ?? 
         switch (_internalState)
         {
             case InternalState.IDLE:
@@ -87,12 +91,11 @@ public class PassiveObjectController : MonoBehaviour
                 }
                 else
                 {
-                    interpolationFramesCount = 100; 
-                    _internalState = InternalState.IDLE; 
+                    ReinitState();
                 }
                 break;
             case InternalState.MOVEBACKWARD:
-                //    Vector3 interpolatedPosition = Vector3.Lerp(gameObject.transform.position, gameObject.transform.forward, interpolationFramesCount);
+                 //   Vector3 interpolatedPosition = Vector3.Lerp(gameObject.transform.position, gameObject.transform.forward, interpolationFramesCount);
                 //    gameObject.transform.position = interpolatedPosition;
                 //
                 break;
@@ -111,5 +114,11 @@ public class PassiveObjectController : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    private void ReinitState()
+    {
+        interpolationFramesCount = 100;
+        _internalState = InternalState.IDLE;
     }
 }

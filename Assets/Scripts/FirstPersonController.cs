@@ -8,17 +8,19 @@ public class FirstPersonController : MonoBehaviour
     public float speed = 10.0f;
     public float rotationSpeed = 100.0f;
     [SerializeField]private GameObject cam;
-    [SerializeField]private GameObject character; 
+    [SerializeField]private GameObject character;
+    [SerializeField] private Transform cameraRef; 
 
     Quaternion cameraRot;
-    Quaternion characterRot; 
-   
+    Quaternion characterRot;
+
+
 
     private void Start()
     {
         cameraRot = cam.transform.localRotation;
-        characterRot = character.transform.localRotation; 
-
+        characterRot = character.transform.localRotation;
+       
     }
 
     void Update()
@@ -43,8 +45,19 @@ public class FirstPersonController : MonoBehaviour
     private void MovePlayer()
     {
         float translation = Input.GetAxis("Vertical") * speed;
-        float rotation = Input.GetAxis("Horizontal") * rotationSpeed;
-        transform.Translate(translation * Time.deltaTime * speed, 0, 0);
-        transform.Rotate(0, rotation * Time.deltaTime, 0);
+        float rotation = Input.GetAxis("Horizontal") * speed ;// rotationSpeed;
+
+        Vector3 camForward = Vector3.Scale(cameraRef.forward, new Vector3(1, 0, 1)).normalized;
+        Vector3 moveVector = (translation * camForward + rotation * cameraRef.right).normalized * speed * Time.deltaTime;
+
+        transform.Translate(moveVector);
+
+        /*
+          float translation = Input.GetAxis("Vertical") * speed;
+          float rotation = Input.GetAxis("Horizontal") * speed ;// rotationSpeed;
+          transform.Translate(translation * Time.deltaTime * speed, 0, rotation * Time.deltaTime, Space.World);
+         */
+        // transform.Rotate(0, rotation * Time.deltaTime, 0);
+
     }
 }
